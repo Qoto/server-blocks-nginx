@@ -9,13 +9,29 @@ php -v > /dev/null 2>&1 || {
   exit 0; 
 }
 
-# Test if HipHop is installed
-hhvm --version > /dev/null 2>&1
-HHVM_IS_INSTALLED=$?
-
 # Test if Nginx is installed
 nginx -v > /dev/null 2>&1
 NGINX_IS_INSTALLED=$?
+if [ NGINX_IS_INSTALLED -eq 0 ]; then
+  printf "====== NGINX is not installed. Begin installation ======\n"; 
+  sudo apt-get update && sudo apt-get install nginx nginx-common nginx-core 
+  sudo service nginx start
+  printf "====== NGINX installed. ======\n"; 
+fi
+
+# Test if HipHop is installed
+hhvm --version > /dev/null 2>&1
+HHVM_IS_INSTALLED=$?
+if [ HHVM_IS_INSTALLED -eq 0 ]; then
+  printf "====== HipHop is not installed. Begin installation ======\n"; 
+  wget -O - http://dl.hhvm.com/conf/hhvm.gpg.key | sudo apt-key add -
+  echo deb http://dl.hhvm.com/ubuntu trusty main | sudo tee /etc/apt/sources.list.d/hhvm.list
+  sudo apt-get update
+  sudo apt-get install hhvm
+  sudo update-rc.d hhvm defaults
+  sudo /usr/share/hhvm/install_fastcgi.sh
+  printf "====== HipHop installed. ======\n"; 
+fi
 
 echo ">>> Installing $DOMAIN"
 
