@@ -70,7 +70,10 @@ server {
   # listen 80 accept_filter=httpready; # for FreeBSD
   listen [::]:80;
   listen 80;
-
+  
+  # index
+  index index.php index.html index.htm;
+  
   # The host name to respond to
   server_name $DOMAIN;
   
