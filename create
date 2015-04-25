@@ -26,7 +26,7 @@ sudo mkdir -p $ROOT_DIR
 # sudo chown -R $USER:$USER $ROOT_DIR
 
 # Create the Nginx server block file:
-sudo tee $block > /dev/null <<EOF 
+sudo tee $BLOCK > /dev/null <<EOF 
 server {
   # don't forget to tell on which port this server listens
   listen [::]:80;
