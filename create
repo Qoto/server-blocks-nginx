@@ -16,7 +16,17 @@ if [ NGINX_IS_INSTALLED -eq 0 ]; then
   printf "====== NGINX is not installed. Begin installation ======\n"; 
   sudo apt-get update && sudo apt-get install nginx nginx-common nginx-core 
   sudo service nginx start
-  printf "====== NGINX installed. ======\n"; 
+  printf "====== NGINX installed. ======\n";
+fi
+
+# Test if nginx H5BP is installed
+if [ ! -d /etc/nginx/h5bp  ]; then
+  printf "====== Begin installation of nginx h5bp ======\n"; 
+  /etc/init.d/nginx stop
+  cd /etc
+  mv nginx nginx-old
+  git clone https://github.com/Qoto/server-configs-nginx.git nginx
+  /etc/init.d/nginx start
 fi
 
 # Test if HipHop is installed
