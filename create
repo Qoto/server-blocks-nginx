@@ -58,11 +58,9 @@ server {
   listen [::]:80;
   listen 80;
 
-  # listen on the www host
-  server_name www.$DOMAIN;
-
-  # and redirect to the non-www host (declared below)
-  return 301 \$scheme://$DOMAIN\$request_uri;
+  # listen on the www host and redirect to the non-www host (declared below)
+  server_name "~^www\.(.*)$";
+  return 301 $scheme://$1$request_uri;
 }
 
 server {
