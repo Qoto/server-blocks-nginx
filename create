@@ -10,9 +10,7 @@ php -v > /dev/null 2>&1 || {
 }
 
 # Test if Nginx is installed
-nginx -v > /dev/null 2>&1
-NGINX_IS_INSTALLED=$?
-if [ NGINX_IS_INSTALLED -eq 0 ]; then
+if ! which nginx > /dev/null 2>&1; then
   printf "====== NGINX is not installed. Begin installation ======\n"; 
   sudo apt-get update && sudo apt-get install nginx nginx-common nginx-core 
   sudo service nginx start
