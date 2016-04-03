@@ -28,9 +28,7 @@ if [ ! -d /etc/nginx/h5bp  ]; then
 fi
 
 # Test if HipHop is installed
-hhvm --version > /dev/null 2>&1
-HHVM_IS_INSTALLED=$?
-if [ HHVM_IS_INSTALLED -eq 0 ]; then
+if ! which hhvm > /dev/null 2>&1; then
   printf "====== HipHop is not installed. Begin installation ======\n"; 
   wget -O - http://dl.hhvm.com/conf/hhvm.gpg.key | sudo apt-key add -
   echo deb http://dl.hhvm.com/ubuntu trusty main | sudo tee /etc/apt/sources.list.d/hhvm.list
