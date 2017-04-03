@@ -22,21 +22,9 @@ if [ ! -d /etc/nginx/h5bp  ]; then
   printf "====== Begin installation of nginx h5bp ======\n"; 
   /etc/init.d/nginx stop
   cd /etc
-  mv nginx nginx-old
+  mv nginx nginx-distro
   git clone https://github.com/Qoto/server-configs-nginx.git nginx
   /etc/init.d/nginx start
-fi
-
-# Test if HipHop is installed
-if ! which hhvm > /dev/null 2>&1; then
-  printf "====== HipHop is not installed. Begin installation ======\n"; 
-  wget -O - http://dl.hhvm.com/conf/hhvm.gpg.key | sudo apt-key add -
-  echo deb http://dl.hhvm.com/ubuntu trusty main | sudo tee /etc/apt/sources.list.d/hhvm.list
-  sudo apt-get update
-  sudo apt-get install hhvm
-  sudo update-rc.d hhvm defaults
-  sudo /usr/share/hhvm/install_fastcgi.sh
-  printf "====== HipHop installed. ======\n"; 
 fi
 
 echo ">>> Installing $DOMAIN"
@@ -71,8 +59,9 @@ server {
   
   # Work With FastCGI
   location ~ \\.(hh|php)\$ {
+    try_files $uri =404;
     fastcgi_keep_conn on;
-    fastcgi_pass   127.0.0.1:9000;
+    fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
     fastcgi_index  index.php;
     fastcgi_param  SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
     include        fastcgi_params;
